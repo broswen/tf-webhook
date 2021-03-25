@@ -123,20 +123,20 @@ resource "aws_cloudwatch_event_target" "event_target" {
 
 resource "aws_iam_role" "http_integration_role" {
   name               = "${var.name}-${var.stage}-http-integration-role"
-  assume_role_policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "apigateway.amazonaws.com"
-            }
-        }
-    ]
-}
-POLICY
+  assume_role_policy = <<-POLICY
+  {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                  "Service": "apigateway.amazonaws.com"
+              }
+          }
+      ]
+  }
+  POLICY
 
   inline_policy {
     name   = "inline"
