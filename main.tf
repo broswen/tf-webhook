@@ -11,21 +11,21 @@ resource "aws_sqs_queue" "event_queue" {
 
 resource "aws_sqs_queue_policy" "event_queue_policy" {
   queue_url = aws_sqs_queue.event_queue.id
-  policy    = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "events.amazonaws.com"
-            },
-            "Action": "sqs:SendMessage",
-            "Resource": "${aws_sqs_queue.event_queue.arn}"
-        }
-    ]
-}
-POLICY
+  policy    = <<-POLICY
+  {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Effect": "Allow",
+              "Principal": {
+                  "Service": "events.amazonaws.com"
+              },
+              "Action": "sqs:SendMessage",
+              "Resource": "${aws_sqs_queue.event_queue.arn}"
+          }
+      ]
+  }
+  POLICY
 }
 
 resource "aws_sqs_queue" "dlq_queue" {
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   name           = "${var.name}-${var.stage}-rule"
   event_bus_name = "${var.name}-${var.stage}-bus"
 
-  event_pattern = <<EOF
+  event_pattern = <<-EOF
   {
       "source": [
           "${var.name}-${var.stage}"
@@ -108,7 +108,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
           "webhook"
       ]
   }
-EOF
+  EOF
 }
 
 resource "aws_cloudwatch_event_target" "event_target" {
@@ -140,18 +140,18 @@ POLICY
 
   inline_policy {
     name   = "inline"
-    policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "events:*",
-            "Resource": "${aws_cloudwatch_event_bus.event_bus.arn}"
-        }
-    ]
-}
-POLICY
+    policy = <<-POLICY
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": "events:*",
+                "Resource": "${aws_cloudwatch_event_bus.event_bus.arn}"
+            }
+        ]
+    }
+    POLICY
 
   }
 
